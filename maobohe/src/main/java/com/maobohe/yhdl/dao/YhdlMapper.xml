@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maobohe.yhdl.dao.YhdlMapper">
+	<!-- 根据身份查询菜单 -->
+	<select id="getMenuByYhsf" parameterType="java.lang.String" resultType="java.util.Map" useCache="false">
+		select c.cdid, c.fcdid, c.cdmc, c.cdxh, c.cddm, l.url, c.cdzxys, l.iswblj, dm.yhsflx
+		  from dm_yhcdqx dm
+	 left join yh_cdqx qc on dm.qxbzdm = qc.qxbzdm
+     left join yh_cd c on qc.cdid = c.cdid
+     left join yh_cdlj l on l.cdid = c.cdid
+		 where c.tybz = 'N'
+		   and c.yxbz = 'Y'
+		   and c.issycd = 'Y'
+		   and c.fcdid = '0'
+		 order by cdid asc
+	</select>
+</mapper>

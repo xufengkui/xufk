@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maobohe.register.dao.RegistMapper">
+	<!-- 根据身份查询菜单 -->
+	<insert id="insertUserInfo" parameterType="java.util.Map">
+		insert into user_info(
+			id,
+			loginName,
+			password,
+			jb_dm,
+			user_mh
+		)values(
+			#{userId,jdbcType=VARCHAR},
+			#{loginName,jdbcType=VARCHAR},
+			#{password,jdbcType=VARCHAR},
+			#{jbDm,jdbcType=VARCHAR},
+			#{userMh,jdbcType=VARCHAR}
+		)
+	</insert>
+	<select id="getMh" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT FLOOR(RAND() * #{length,jdbcType=VARCHAR}) AS mh FROM user_mh
+		WHERE "mh" NOT IN (SELECT my_number FROM user_mh)
+		LIMIT 1
+	</select>
+	<update id="updateUserInfo" parameterType="java.util.Map">
+		update user_info set
+		pic_dir = #{picDir,jdbcType=VARCHAR},
+		user_nc = #{userNc,jdbcType=VARCHAR},
+		user_xb = #{userXb,jdbcType=VARCHAR},
+		user_birth = STR_TO_DATE(#{userBirth,jdbcType=VARCHAR},"%Y-%m-%d"), 
+		user_qm = #{userQm,jdbcType=VARCHAR}
+		where user_mh = #{userMh,jdbcType=VARCHAR}
+	</update>
+	<insert id="insertCzjl" parameterType="java.util.Map">
+		insert into jf_czjl(
+			mh,
+			dm_cz,
+			czsj
+		)values(
+			#{mh,jdbcType=VARCHAR},
+			#{dmCz,jdbcType=VARCHAR},
+			now()
+		)
+	</insert>
+	<select id="getCzxx" parameterType="java.util.Map" resultType="java.util.Map">
+		select dm_cz,czmc,czjf from dm_czjfxx where dm_cz = #{dmCz,jdbcType=VARCHAR}
+	</select>
+	<insert id="insertMh" parameterType="java.util.Map">
+		insert into user_mh(
+			my_number
+		)values(
+			#{mh,jdbcType=VARCHAR}
+		)
+	</insert>
+	<select id="getSfzc" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from user_info where loginName = #{loginName,jdbcType=VARCHAR}
+	</select>
+</mapper>
